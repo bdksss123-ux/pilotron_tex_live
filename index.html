@@ -1,0 +1,341 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kirim Pesan Live VJ</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+        }
+
+        body {
+            background-color: #0a0a0c;
+            color: #ffffff;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            padding: 20px;
+            overflow-x: hidden;
+        }
+
+        body::before {
+            content: '';
+            position: absolute;
+            width: 300px;
+            height: 300px;
+            background: linear-gradient(45deg, #00adb5, #ff007f);
+            filter: blur(150px);
+            opacity: 0.2;
+            z-index: 0;
+            top: 10%;
+            left: 10%;
+        }
+
+        .container {
+            background: rgba(18, 18, 24, 0.8);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            padding: 30px 25px;
+            border-radius: 24px;
+            width: 100%;
+            max-width: 420px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.5);
+            text-align: center;
+            z-index: 1;
+        }
+
+        h1 {
+            font-family: 'Perpetua Titling MT', 'Perpetua', 'Georgia', serif;
+            font-size: 26px;
+            font-weight: bold;
+            letter-spacing: 2px;
+            background: linear-gradient(45deg, #00adb5, #00f5ff);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 8px;
+        }
+
+        p.subtitle {
+            font-size: 14px;
+            color: #8a8a93;
+            margin-bottom: 25px;
+        }
+
+        .input-group {
+            text-align: left;
+            margin-bottom: 15px;
+        }
+
+        label {
+            font-size: 12px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: #00adb5;
+            display: block;
+            margin-bottom: 8px;
+            padding-left: 5px;
+        }
+
+        textarea {
+            width: 100%;
+            height: 110px;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 14px;
+            padding: 15px;
+            color: #fff;
+            font-size: 16px;
+            resize: none;
+            transition: all 0.3s ease;
+        }
+
+        textarea:focus, input:focus {
+            outline: none;
+            border-color: #00adb5;
+            background: rgba(0, 173, 181, 0.05);
+            box-shadow: 0 0 15px rgba(0, 173, 181, 0.2);
+        }
+
+        .hashtag-container {
+            position: relative;
+            display: flex;
+            align-items: center;
+        }
+
+        .hashtag-prefix {
+            position: absolute;
+            left: 15px;
+            color: #00adb5;
+            font-size: 16px;
+            font-weight: bold;
+        }
+
+        .hashtag-input {
+            width: 100%;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 14px;
+            padding: 12px 12px 12px 32px;
+            color: #fff;
+            font-size: 16px;
+        }
+
+        .warning-text {
+            font-size: 11px;
+            color: #ffcc00;
+            margin-top: 10px;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 5px;
+            background: rgba(255, 204, 0, 0.1);
+            padding: 8px;
+            border-radius: 8px;
+            border: 1px solid rgba(255, 204, 0, 0.2);
+        }
+
+        button {
+            width: 100%;
+            background: linear-gradient(45deg, #00adb5, #007880);
+            color: white;
+            border: none;
+            padding: 15px;
+            font-size: 16px;
+            font-weight: 700;
+            border-radius: 14px;
+            cursor: pointer;
+            box-shadow: 0 4px 15px rgba(0, 173, 181, 0.3);
+            transition: all 0.3s ease;
+        }
+
+        button:disabled {
+            background: #2a2a30 !important;
+            color: #666 !important;
+            box-shadow: none !important;
+            cursor: not-allowed;
+        }
+
+        /* Desain Kotak Overload / Tutup */
+        .overload-box {
+            background: rgba(220, 53, 69, 0.1);
+            border: 1px solid rgba(220, 53, 69, 0.3);
+            padding: 20px;
+            border-radius: 14px;
+            color: #ff4a5a;
+            font-weight: bold;
+            font-size: 15px;
+            margin-top: 10px;
+            line-height: 1.5;
+        }
+
+        #toast {
+            visibility: hidden;
+            min-width: 280px;
+            background-color: #28a745;
+            color: #fff;
+            text-align: center;
+            border-radius: 12px;
+            padding: 16px;
+            position: fixed;
+            z-index: 10;
+            bottom: 30px;
+            font-weight: 600;
+        }
+
+        #toast.show {
+            visibility: visible;
+            animation: fadein 0.5s, fadeout 0.5s 2.5s;
+        }
+
+        @keyframes fadein { from {bottom: 0; opacity: 0;} to {bottom: 30px; opacity: 1;} }
+        @keyframes fadeout { from {bottom: 30px; opacity: 1;} to {bottom: 0; opacity: 0;} }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <h1>PILOTRON LIVE TEXT</h1>
+        <p class="subtitle">kirim kata kata terbaik mu ke vidiotron ketua</p>
+        
+        <!-- ELEMENT FORM (Akan disembunyikan otomatis jika overload/ditutup) -->
+        <div id="form-area">
+            <div class="input-group">
+                <label for="message">kata kata mu ketua</label>
+                <textarea id="message" placeholder="Ketikan sesuatu di sini..."></textarea>
+            </div>
+
+            <div class="input-group">
+                <label for="hashtag">tambahkan hastag</label>
+                <div class="hashtag-container">
+                    <span class="hashtag-prefix">#</span>
+                    <input type="text" id="hashtag" class="hashtag-input" placeholder="namamu / komunitas">
+                </div>
+            </div>
+
+            <div class="warning-text">
+                ⚠️ Cukup tekan "KIRIM" 1 kali saja untuk mengantre.
+            </div>
+
+            <button id="send-btn">KIRIM PESAN</button>
+        </div>
+
+        <!-- ELEMENT NOTIFIKASI OVERLOAD -->
+        <div id="overload-area" style="display: none;">
+            <div class="overload-box">
+                🛑 Mohon maaf antrean sudah overload ketua!<br>
+                <span style="color: #aaa; font-size: 13px; font-weight: normal; display: block; margin-top: 8px;">
+                    Slot penuh atau kiriman pesan sedang ditutup sementara oleh VJ. Silakan coba scan beberapa saat lagi setelah pesan di layar berganti! 🙏🔥
+                </span>
+            </div>
+        </div>
+    </div>
+
+    <div id="toast">kata kata mu sedang di proses ketua 🚀</div>
+
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/12.14.0/firebase-app.js";
+        import { getFirestore, collection, addDoc, serverTimestamp, onSnapshot, doc, query } from "https://www.gstatic.com/firebasejs/12.14.0/firebase-firestore.js";
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyAJKLFq0ChkRUtf0AFrFY7GL4AdL_BpUyA",
+            authDomain: "pilotron-text-live.firebaseapp.com",
+            projectId: "pilotron-text-live",
+            storageBucket: "pilotron-text-live.firebasestorage.app",
+            messagingSenderId: "315875806360",
+            appId: "1:315875806360:web:6d25f30c6f8c7f9cb094ed",
+            measurementId: "G-DHVPM23K5G"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const db = getFirestore(app);
+
+        const formArea = document.getElementById("form-area");
+        const overloadArea = document.getElementById("overload-area");
+        const sendBtn = document.getElementById("send-btn");
+        const messageInput = document.getElementById("message");
+        const hashtagInput = document.getElementById("hashtag");
+        const toast = document.getElementById("toast");
+
+        let isGateOpen = true;
+        let currentTotalMessages = 0;
+
+        // Fungsi mengecek kelayakan kirim
+        function checkSystemStatus() {
+            // Jika Gerbang ditutup manual OLEH VJ (OFF) ATAU Antrean pesan sudah >= 7
+            if (!isGateOpen || currentTotalMessages >= 7) {
+                formArea.style.display = "none";
+                overloadArea.style.display = "block";
+            } else {
+                formArea.style.display = "block";
+                overloadArea.style.display = "none";
+            }
+        }
+
+        // 1. Pantau Status On/Off dari Admin secara Live
+        onSnapshot(doc(db, "settings", "gate"), (docSnap) => {
+            isGateOpen = docSnap.exists() ? docSnap.data().isOpen : true;
+            checkSystemStatus();
+        });
+
+        // 2. Pantau Jumlah Pesan aktif di Firebase
+        onSnapshot(collection(db, "messages"), (snapshot) => {
+            currentTotalMessages = snapshot.size;
+            checkSystemStatus();
+        });
+
+        // Proses Kirim Pesan
+        sendBtn.addEventListener("click", async () => {
+            let text = messageInput.value.trim();
+            const tag = hashtagInput.value.trim();
+
+            if (text === "") {
+                alert("Kata-kata tidak boleh kosong!");
+                return;
+            }
+
+            if (tag !== "") {
+                const cleanTag = tag.replace("#", ""); 
+                text = `${text}\n#${cleanTag}`;
+            }
+
+            sendBtn.disabled = true;
+            sendBtn.innerText = "MENGIRIM...";
+            messageInput.disabled = true;
+            hashtagInput.disabled = true;
+
+            try {
+                await addDoc(collection(db, "messages"), {
+                    text: text,
+                    createdAt: serverTimestamp()
+                });
+
+                toast.className = "show";
+                messageInput.value = "";
+                hashtagInput.value = "";
+
+                setTimeout(() => {
+                    toast.className = toast.className.replace("show", "");
+                    sendBtn.disabled = false;
+                    sendBtn.innerText = "KIRIM PESAN";
+                    messageInput.disabled = false;
+                    hashtagInput.disabled = false;
+                }, 3000);
+
+            } catch (error) {
+                alert("Gagal mengirim, coba lagi.");
+                sendBtn.disabled = false;
+                sendBtn.innerText = "KIRIM PESAN";
+                messageInput.disabled = false;
+                hashtagInput.disabled = false;
+            }
+        });
+    </script>
+</body>
+</html>

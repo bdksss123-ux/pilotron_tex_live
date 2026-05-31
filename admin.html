@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>VJ Admin Panel - Control Label</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+        }
+
+        body {
+            background-color: #08080a;
+            background-image: 
+                linear-gradient(rgba(0, 173, 181, 0.03) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(0, 173, 181, 0.03) 1px, transparent 1px);
+            background-size: 20px 20px;
+            color: #ffffff;
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        /* Navigasi Atas */
+        .top-bar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            max-width: 550px;
+            margin: 0 auto 20px auto;
+            padding: 0 5px;
+        }
+
+        /* Kolom Saklar dengan Keterangan Jelas */
+        .control-column {
+            background: #121216;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            padding: 10px 14px;
+            border-radius: 12px;
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+        }
+
+        .control-column span {
+            font-size: 11px;
+            color: #00adb5;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            font-weight: 700;
+        }
+
+        .btn-group {
+            display: flex;
+            gap: 8px;
+        }
+
+        .btn-status {
+            padding: 6px 14px;
+            font-size: 11px;
+            font-weight: bold;
+            border-radius: 6px;
+            border: none;
+            cursor: pointer;
+            color: #fff;
+            opacity: 0.3;
+            transition: all 0.2s;
+        }
+
+        .btn-status.active {
+            opacity: 1 !important;
+            box-shadow: 0 0 10px currentColor;
+        }
+
+        #btn-on { background: #28a745; color: white; }
+        #btn-off { background: #dc3545; color: white; }
+
+        #logout-btn {
+            background: transparent;
+            color: #ff3b30;
+            border: 1px solid rgba(255, 59, 48, 0.3);
+            padding: 6px 12px;
+            font-size: 12px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: bold;
+        }
+
+        .header-area {
+            text-align: center;
+            margin-bottom: 25px;
+        }
+
+        h1 {
+            font-family: 'Perpetua Titling MT', 'Perpetua', 'Georgia', serif;
+            font-size: 28px;
+            letter-spacing: 3px;
+            background: linear-gradient(45deg, #00adb5, #00f5ff);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        #login-box {
+            background: rgba(18, 18, 24, 0.85);
+            border: 1px solid rgba(0, 173, 181, 0.2);
+            backdrop-filter: blur(10px);
+            padding: 40px 30px;
+            border-radius: 20px;
+            width: 100%;
+            max-width: 400px;
+            margin: 100px auto 0 auto;
+            text-align: center;
+            box-shadow: 0 15px 35px rgba(0,0,0,0.6);
+        }
+
+        input {
+            width: 100%;
+            padding: 14px;
+            background: #121216;
+            color: white;
+            border: 1px solid #2a2a35;
+            border-radius: 10px;
+            font-size: 16px;
+            text-align: center;
+            margin-bottom: 15px;
+        }
+
+        .btn-main {
+            background: linear-gradient(45deg, #00adb5, #007880);
+            color: white;
+            border: none;
+            padding: 14px 28px;
+            font-size: 16px;
+            font-weight: 700;
+            border-radius: 10px;
+            cursor: pointer;
+            width: 100%;
+        }
+
+        #panel {
+            display: none;
+            max-width: 550px;
+            margin: 0 auto;
+        }
+
+        .sub-title {
+            text-align: center;
+            color: #8a8a93;
+            font-size: 14px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 15px;
+        }
+
+        #messages {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+    </style>
+</head>
+<body>
+
+    <div id="login-box">
+        <h1 style="margin-bottom: 20px; font-size: 24px;">VJ ADMIN PANEL</h1>
+        <input type="password" id="password" placeholder="Masukkan Password Admin">
+        <button id="login" class="btn-main">MASUK PANEL</button>
+    </div>
+
+    <div id="panel">
+        
+        <div class="top-bar">
+            <div class="control-column">
+                <span>MANUAL CONTROL :</span>
+                <div class="btn-group">
+                    <button id="btn-on" class="btn-status">ON (BUKA)</button>
+                    <button id="btn-off" class="btn-status">OFF (TUTUP)</button>
+                </div>
+            </div>
+            <div id="logout-area"></div>
+        </div>
+
+        <div class="header-area">
+            <h1>VJ ADMIN PANEL</h1>
+        </div>
+
+        <div class="sub-title" id="counter-title">Antrean Pesan Live (0/7)</div>
+        <div id="messages"></div>
+    </div>
+
+    <script type="module" src="admin.js"></script>
+
+</body>
+</html>
